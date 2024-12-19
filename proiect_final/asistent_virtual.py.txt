@@ -1,0 +1,168 @@
+asistent_virtual.py
+
+import tkinter as tk
+from tkinter import messagebox
+
+# Recomandări de produse pentru fiecare tip de păr
+produse = {
+    "gras": [
+        "Șampon purificator cu cărbune activ",
+        "Balsam pentru volum fără uleiuri",
+        "Spray uscat pentru absorbția sebumului"
+    ],
+    "uscat": [
+        "Șampon hidratant cu ulei de argan",
+        "Balsam reparator cu keratină",
+        "Mască intens hidratantă cu avocado"
+    ],
+    "normal": [
+        "Șampon echilibrant pentru uz zilnic",
+        "Balsam cu proteine de mătase",
+        "Spray pentru strălucire"
+    ],
+    "mixt": [
+        "Șampon pentru rădăcini grase și vârfuri uscate",
+        "Balsam nutritiv pentru vârfuri despicate",
+        "Ser pentru hidratare ușoară"
+    ]
+}
+
+# Funcție Bubble Sort (pentru sortarea produselor)
+def bubble_sort(lista):
+    n = len(lista)
+    for i in range(n):
+        for j in range(0, n-i-1):
+            if lista[j] > lista[j+1]:
+                lista[j], lista[j+1] = lista[j+1], lista[j]
+
+# Funcție Merge Sort (pentru sortarea sfaturilor)
+def merge_sort(lista):
+    if len(lista) > 1:
+        mid = len(lista) // 2
+        left_half = lista[:mid]
+        right_half = lista[mid:]
+
+        merge_sort(left_half)
+        merge_sort(right_half)
+
+        i = j = k = 0
+
+        while i < len(left_half) and j < len(right_half):
+            if left_half[i] < right_half[j]:
+                lista[k] = left_half[i]
+                i += 1
+            else:
+                lista[k] = right_half[j]
+                j += 1
+            k += 1
+
+        while i < len(left_half):
+            lista[k] = left_half[i]
+            i += 1
+            k += 1
+
+        while j < len(right_half):
+            lista[k] = right_half[j]
+            j += 1
+            k += 1
+
+# Funcție pentru identificarea tipului de păr
+def identifica_tipul_de_par():
+    raspuns1 = var_raspuns1.get()
+    raspuns2 = var_raspuns2.get()
+
+    # Logica pentru identificarea tipului de păr
+    if raspuns1 == "a" or (raspuns1 == "d" and raspuns2 == "a"):
+        return "gras"
+    elif raspuns1 == "b" or raspuns2 == "b":
+        return "uscat"
+    elif raspuns1 == "c" and raspuns2 == "c":
+        return "normal"
+    elif raspuns1 == "d" or raspuns2 == "d":
+        return "mixt"
+    else:
+        return "necunoscut"
+
+# Funcție pentru recomandarea produselor
+def recomanda_produse():
+    tip_par = identifica_tipul_de_par()
+    if tip_par in produse:
+        result_text.set(f"Tipul tău de păr este: {tip_par.capitalize()}\nProduse recomandate:\n")
+        produse_tip_par = produse[tip_par]
+        bubble_sort(produse_tip_par)  # Sortăm produsele folosind Bubble Sort
+        for produs in produse_tip_par:
+            result_text.set(result_text.get() + f"- {produs}\n")
+    else:
+        result_text.set("\n❌ Nu am putut identifica tipul tău de păr. Te rog să încerci din nou!")
+
+# Funcție pentru sfaturi generale de îngrijire
+def sfaturi_ingrijire():
+    sfaturi = [
+        "Spală-te pe păr cu apă călduță, nu fierbinte, pentru a preveni deshidratarea.",
+        "Evită folosirea excesivă a plăcii sau ondulatorului pentru a proteja vârfurile.",
+        "Folosește un șampon potrivit tipului tău de păr pentru cele mai bune rezultate.",
+        "Aplică balsamul doar pe lungimea părului, nu la rădăcini.",
+        "Tunde vârfurile la fiecare 6-8 săptămâni pentru a preveni despicarea."
+    ]
+    merge_sort(sfaturi)  # Sortăm sfaturile folosind Merge Sort
+    result_text.set("\nSfaturi generale pentru îngrijirea părului:\n")
+    for sfat in sfaturi:
+        result_text.set(result_text.get() + f"- {sfat}\n")
+
+# Crearea interfeței grafice cu tkinter
+root = tk.Tk()
+root.title("Asistent Virtual pentru Îngrijirea Părului")
+root.geometry("600x400")
+
+# Etichete pentru întrebări
+label_question1 = tk.Label(root, text="Cât de repede ți se îngrașă părul după spălare?")
+label_question1.pack()
+
+var_raspuns1 = tk.StringVar()
+var_raspuns1.set("a")  # Răspuns default
+
+radio_a = tk.Radiobutton(root, text="În mai puțin de 2 zile", variable=var_raspuns1, value="a")
+radio_b = tk.Radiobutton(root, text="După 3-4 zile", variable=var_raspuns1, value="b")
+radio_c = tk.Radiobutton(root, text="Nu se îngrașă ușor", variable=var_raspuns1, value="c")
+radio_d = tk.Radiobutton(root, text="Se îngrașă la rădăcini, dar vârfurile sunt uscate", variable=var_raspuns1, value="d")
+
+radio_a.pack()
+radio_b.pack()
+radio_c.pack()
+radio_d.pack()
+
+# Etichete pentru a doua întrebare
+label_question2 = tk.Label(root, text="Cum arată vârfurile părului tău?")
+label_question2.pack()
+
+var_raspuns2 = tk.StringVar()
+var_raspuns2.set("a")  # Răspuns default
+
+radio_a2 = tk.Radiobutton(root, text="Nu am probleme cu vârfurile", variable=var_raspuns2, value="a")
+radio_b2 = tk.Radiobutton(root, text="Sunt uscate și despicate", variable=var_raspuns2, value="b")
+radio_c2 = tk.Radiobutton(root, text="Sunt hidratate și sănătoase", variable=var_raspuns2, value="c")
+radio_d2 = tk.Radiobutton(root, text="Sunt uscate, dar rădăcinile sunt grase", variable=var_raspuns2, value="d")
+
+radio_a2.pack()
+radio_b2.pack()
+radio_c2.pack()
+radio_d2.pack()
+
+# Buton pentru identificare și recomandare
+button_recomanda = tk.Button(root, text="Află produsele potrivite", command=recomanda_produse)
+button_recomanda.pack(pady=10)
+
+button_sfaturi = tk.Button(root, text="Primește sfaturi generale", command=sfaturi_ingrijire)
+button_sfaturi.pack(pady=10)
+
+# Etichetă pentru afișarea rezultatelor
+result_text = tk.StringVar()
+result_label = tk.Label(root, textvariable=result_text, justify="left")
+result_label.pack(pady=10)
+
+# Buton pentru închidere
+button_exit = tk.Button(root, text="Ieși", command=root.quit)
+button_exit.pack(pady=10)
+
+# Start interfața grafică
+root.mainloop()
