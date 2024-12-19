@@ -93,7 +93,7 @@ def recomanda_produse():
         for produs in produse_tip_par:
             result_text.set(result_text.get() + f"- {produs}\n")
     else:
-        result_text.set("\n❌ Nu am putut identifica tipul tău de păr. Te rog să încerci din nou!")
+        result_text.set("\n Nu am putut identifica tipul tău de păr. Te rog să încerci din nou!")
 
 # Funcție pentru sfaturi generale de îngrijire
 def sfaturi_ingrijire():
